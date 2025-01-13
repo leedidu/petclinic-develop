@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.domain.history.dto.HistoryRequestDto;
 import org.springframework.samples.petclinic.domain.history.dto.HistoryResponseDto;
-import org.springframework.samples.petclinic.domain.history.service.HistoryService;
+import org.springframework.samples.petclinic.domain.history.service.CreateHistoryService;
+import org.springframework.samples.petclinic.domain.history.service.DeleteHistoryService;
+import org.springframework.samples.petclinic.domain.history.service.ReadHistoryService;
+import org.springframework.samples.petclinic.domain.history.service.UpdateHistoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HistoryController {
 
-	private final HistoryService historyService;
+	private final CreateHistoryService createHistoryService;
+	private final ReadHistoryService readHistoryService;
+	private final UpdateHistoryService updateHistoryService;
+	private final DeleteHistoryService deleteHistoryService;
+
 	/**
 	 * 새로운 진료 내역 추가
 	 *
@@ -25,7 +32,7 @@ public class HistoryController {
 	 */
 	@PostMapping
 	public ResponseEntity<?> addHistory(@Valid @RequestBody HistoryRequestDto request) {
-		HistoryResponseDto response = historyService.addHistory(request);
+		HistoryResponseDto response = createHistoryService.addHistory(request);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
@@ -37,7 +44,7 @@ public class HistoryController {
 	 */
 	@GetMapping("/{petId}")
 	public ResponseEntity<List<HistoryResponseDto>> getHistoriesByPetId(@PathVariable("petId") int petId) {
-		List<HistoryResponseDto> response = historyService.getHistoriesByPetId(petId);
+		List<HistoryResponseDto> response = readHistoryService.getHistoriesByPetId(petId);
 		return ResponseEntity.ok(response);
 	}
 
@@ -49,7 +56,7 @@ public class HistoryController {
 	 */
 	@PutMapping("/{historyId}")
 	public ResponseEntity<?> updateHistory(@PathVariable("historyId") int historyId,@Valid @RequestBody HistoryRequestDto request) {
-		HistoryResponseDto response = historyService.updateHistory(historyId,request);
+		HistoryResponseDto response = updateHistoryService.updateHistory(historyId,request);
 		return ResponseEntity.ok(response);
 	}
 
@@ -61,7 +68,7 @@ public class HistoryController {
 	 */
 	@DeleteMapping("/{historyId}")
 	public ResponseEntity<?> deleteHistory(@PathVariable("historyId") int historyId) {
-		historyService.deleteHistory(historyId);
+		deleteHistoryService.deleteHistory(historyId);
 		return ResponseEntity.ok("History deleted successfully.");
 	}
 

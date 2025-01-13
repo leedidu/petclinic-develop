@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.domain.pet.dto.PetRequestDto;
 import org.springframework.samples.petclinic.domain.pet.dto.PetResponseDto;
-import org.springframework.samples.petclinic.domain.pet.service.PetService;
+import org.springframework.samples.petclinic.domain.pet.service.CreatePetService;
+import org.springframework.samples.petclinic.domain.pet.service.DeletePetService;
+import org.springframework.samples.petclinic.domain.pet.service.ReadPetService;
+import org.springframework.samples.petclinic.domain.pet.service.UpdatePetService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,42 +17,45 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PetController {
 
-	private final PetService petService;
+	private final CreatePetService createPetService;
+	private final ReadPetService readPetService;
+	private final UpdatePetService updatePetService;
+	private final DeletePetService deletePetService;
 
 	// 모든 Pet 조회
 	@GetMapping
 	public ResponseEntity<List<PetResponseDto>> getAllPets() {
-		return ResponseEntity.ok(petService.getAllPets());
+		return ResponseEntity.ok(readPetService.getAllPets());
 	}
 
 	// 단일 Pet 조회
 	@GetMapping("/{petId}")
 	public ResponseEntity<PetResponseDto> getPetById(@PathVariable("petId") Integer petId) {
-		return ResponseEntity.ok(petService.getPetById(petId));
+		return ResponseEntity.ok(readPetService.getPetById(petId));
 	}
 
 	// 주인의 펫 조회
 	@GetMapping("/owner/{ownerId}")
 	public ResponseEntity<List<PetResponseDto>> getPetsByOwnerId(@PathVariable("ownerId") Integer ownerId) {
-		return ResponseEntity.ok(petService.getPetsByOwnerId(ownerId));
+		return ResponseEntity.ok(readPetService.getPetsByOwnerId(ownerId));
 	}
 
 	// Pet 생성
 	@PostMapping
 	public ResponseEntity<PetResponseDto> createPet(@RequestBody PetRequestDto request) {
-		return ResponseEntity.ok(petService.createPet(request));
+		return ResponseEntity.ok(createPetService.createPet(request));
 	}
 
 	// Pet 수정
 	@PutMapping("/{petId}")
 	public ResponseEntity<PetResponseDto> updatePet(@PathVariable("petId") Integer petId, @RequestBody PetRequestDto request) {
-		return ResponseEntity.ok(petService.updatePet(petId, request));
+		return ResponseEntity.ok(updatePetService.updatePet(petId, request));
 	}
 
 	// Pet 삭제
 	@DeleteMapping("/{petId}")
 	public ResponseEntity<Void> deletePet(@PathVariable("petId") Integer petId) {
-		petService.deletePet(petId);
+		deletePetService.deletePet(petId);
 		return ResponseEntity.noContent().build();
 	}
 }

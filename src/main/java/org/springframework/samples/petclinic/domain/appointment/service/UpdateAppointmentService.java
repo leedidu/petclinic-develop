@@ -13,7 +13,7 @@ import org.springframework.samples.petclinic.domain.pet.enums.PetStatus;
 import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.pet.repository.PetRepository;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
-import org.springframework.samples.petclinic.domain.vet.service.VetService;
+import org.springframework.samples.petclinic.domain.vet.service.vet.VetUtilsService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,14 +24,14 @@ public class UpdateAppointmentService {
 
 	private final AppointmentRepository appointmentRepository;
 	private final PetRepository petRepository;
-	private final VetService vetService;
+	private final VetUtilsService vetUtilsService;
 	private final AppointmentMapper appointmentMapper;
 
 	public AppointmentResponseDto updateAppointment(Integer appointmentId, AppointmentRequestDto request) {
 		validateRequestData(request);
 		Appointment appointment = getAppointmentOrThrow(appointmentId);
 		Pet pet = getPetOrThrow(request);
-		Vet vet = vetService.getVetOrThrow(request.getVetId());
+		Vet vet = vetUtilsService.getVetOrThrow(request.getVetId());
 
 		updateAppointmentDetails(request, appointment, pet, vet);
 

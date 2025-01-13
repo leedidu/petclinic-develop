@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.domain.review.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.petclinic.common.error.OwnerErrorCode;
 import org.springframework.samples.petclinic.common.error.ReviewErrorCode;
-import org.springframework.samples.petclinic.common.error.VetErrorCode;
 import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.owner.model.Owner;
 import org.springframework.samples.petclinic.domain.owner.repository.OwnerRepository;
@@ -11,7 +10,7 @@ import org.springframework.samples.petclinic.domain.review.model.Review;
 import org.springframework.samples.petclinic.domain.review.repository.ReviewRepository;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.vet.repository.VetRepository;
-import org.springframework.samples.petclinic.domain.vet.service.VetService;
+import org.springframework.samples.petclinic.domain.vet.service.vet.VetUtilsService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,7 +23,7 @@ public class DeleteReviewService {
 	private final OwnerRepository ownerRepository;
 	private final ReviewRepository reviewRepository;
 	private final VetRepository vetRepository;
-	private  final VetService vetService;
+	private  final VetUtilsService vetUtilsService;
 
 	public void deleteReview(Integer reviewId, Integer ownerId) {
 		Owner owner = getOwnerOrThrow(ownerId);
@@ -32,7 +31,7 @@ public class DeleteReviewService {
 
 		validateReviewOwnership(owner, review);
 
-		Vet vet = vetService.getVetOrThrow(review.getVet().getId());
+		Vet vet = vetUtilsService.getVetOrThrow(review.getVet().getId());
 
 		reviewRepository.delete(review);
 

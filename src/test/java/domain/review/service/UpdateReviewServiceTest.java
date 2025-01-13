@@ -21,7 +21,7 @@ import org.springframework.samples.petclinic.domain.review.repository.ReviewRepo
 import org.springframework.samples.petclinic.domain.review.service.UpdateReviewService;
 import org.springframework.samples.petclinic.domain.vet.repository.VetRepository;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
-import org.springframework.samples.petclinic.domain.vet.service.VetService;
+import org.springframework.samples.petclinic.domain.vet.service.vet.VetService;
 
 import java.util.Optional;
 
