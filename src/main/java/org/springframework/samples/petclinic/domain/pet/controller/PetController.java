@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.domain.pet.dto.PetRequestDto;
 import org.springframework.samples.petclinic.domain.pet.dto.PetResponseDto;
+import org.springframework.samples.petclinic.domain.pet.mapper.PetMapper;
+import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.pet.service.CreatePetService;
 import org.springframework.samples.petclinic.domain.pet.service.DeletePetService;
 import org.springframework.samples.petclinic.domain.pet.service.ReadPetService;
@@ -21,35 +23,46 @@ public class PetController {
 	private final ReadPetService readPetService;
 	private final UpdatePetService updatePetService;
 	private final DeletePetService deletePetService;
+	private final PetMapper petMapper;
 
 	// 모든 Pet 조회
 	@GetMapping
 	public ResponseEntity<List<PetResponseDto>> getAllPets() {
-		return ResponseEntity.ok(readPetService.getAllPets());
+		List<Pet> pets = readPetService.getAllPets();
+		List<PetResponseDto> response = petMapper.toListDto(pets);
+		return ResponseEntity.ok(response);
 	}
 
 	// 단일 Pet 조회
 	@GetMapping("/{petId}")
 	public ResponseEntity<PetResponseDto> getPetById(@PathVariable("petId") Integer petId) {
-		return ResponseEntity.ok(readPetService.getPetById(petId));
+		Pet pet = readPetService.getPetById(petId);
+		PetResponseDto response = petMapper.toDto(pet);
+		return ResponseEntity.ok(response);
 	}
 
 	// 주인의 펫 조회
 	@GetMapping("/owner/{ownerId}")
 	public ResponseEntity<List<PetResponseDto>> getPetsByOwnerId(@PathVariable("ownerId") Integer ownerId) {
-		return ResponseEntity.ok(readPetService.getPetsByOwnerId(ownerId));
+		List<Pet> pets = readPetService.getPetsByOwnerId(ownerId);
+		List<PetResponseDto> response = petMapper.toListDto(pets);
+		return ResponseEntity.ok(response);
 	}
 
 	// Pet 생성
 	@PostMapping
 	public ResponseEntity<PetResponseDto> createPet(@RequestBody PetRequestDto request) {
-		return ResponseEntity.ok(createPetService.createPet(request));
+		Pet pet = createPetService.createPet(request);
+		PetResponseDto response = petMapper.toDto(pet);
+		return ResponseEntity.ok(response);
 	}
 
 	// Pet 수정
 	@PutMapping("/{petId}")
 	public ResponseEntity<PetResponseDto> updatePet(@PathVariable("petId") Integer petId, @RequestBody PetRequestDto request) {
-		return ResponseEntity.ok(updatePetService.updatePet(petId, request));
+		Pet pet = updatePetService.updatePet(petId, request);
+		PetResponseDto response = petMapper.toDto(pet);
+		return ResponseEntity.ok(response);
 	}
 
 	// Pet 삭제

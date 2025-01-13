@@ -45,11 +45,19 @@ public class Pet extends BaseEntity {
 	@PrePersist
 	public void prePersist() {
 		if (this.status == null) {
-			this.status = PetStatus.REGISTERED; // 명시적으로 기본값 적용
+			this.status = PetStatus.REGISTERED;
 		}
 	}
 
 	public boolean isRegistered() {
 		return Objects.equals(this.status, PetStatus.REGISTERED);
+	}
+	public Pet updatePet(String name, LocalDate birthDate, PetType type, Owner owner) {
+		return Pet.builder()
+			.name(name != null ? name : this.name)
+			.birthDate(birthDate != null ? birthDate : this.birthDate)
+			.type(type != null ? type : this.type)
+			.owner(owner != null ? owner : this.owner)
+			.build();
 	}
 }

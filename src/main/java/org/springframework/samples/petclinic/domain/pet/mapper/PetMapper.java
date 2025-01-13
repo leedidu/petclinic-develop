@@ -8,6 +8,8 @@ import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.pet.model.PetType;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class PetMapper {
 
@@ -19,6 +21,12 @@ public class PetMapper {
 			.typeId(pet.getType().getId())
 			.ownerId(pet.getOwner().getId())
 			.build();
+	}
+
+	public List<PetResponseDto> toListDto(List<Pet> pets) {
+		return pets.stream()
+			.map(this::toDto)
+			.toList();
 	}
 
 	public Pet toEntity(PetRequestDto petRequestDto, PetType type, Owner owner) {

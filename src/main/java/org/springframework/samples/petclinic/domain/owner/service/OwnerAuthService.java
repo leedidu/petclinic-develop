@@ -1,10 +1,7 @@
 package org.springframework.samples.petclinic.domain.owner.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.OwnerErrorCode;
-import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.owner.dto.LoginRequestDto;
-import org.springframework.samples.petclinic.domain.owner.dto.OwnerResponseDto;
 import org.springframework.samples.petclinic.domain.owner.dto.RegisterRequestDto;
 import org.springframework.samples.petclinic.domain.owner.mapper.OwnerMapper;
 import org.springframework.samples.petclinic.domain.owner.model.Owner;
@@ -24,25 +21,23 @@ public class OwnerAuthService {
 	private final TokenService tokenService;
 	private final PasswordEncoder passwordEncoder;
 	private final OwnerMapper ownerMapper;
+	private final OwnerUtilsService ownerUtilsService;
 
 	// 회원가입
-	public OwnerResponseDto register(RegisterRequestDto registerRequestDto) {
-		validateOwnerDoesNotExist(registerRequestDto);
+	public Owner register(RegisterRequestDto registerRequestDto) {
+		ownerUtilsService.validateOwnerDoesNotExist(registerRequestDto);
 
 		String encryptedPassword = passwordEncoder.encode(registerRequestDto.getPassword());
 
-		Owner owner = registerRequestDto.toEntity();
+		Owner owner = ownerMapper.toRegisterEntity(registerRequestDto);
 		owner.setPassword(encryptedPassword);
-		ownerRepository.save(owner);
-		return ownerMapper.toDto(owner);
+		return ownerRepository.save(owner);
 	}
 
 	// 로그인
 	public TokenResponseDto login(LoginRequestDto loginRequestDto) {
-		Owner owner = findOwnerByOwnerIdOrThrow(loginRequestDto);
-
-		validatePasswordOrThrow(loginRequestDto, owner);
-
+		Owner owner = ownerUtilsService.findOwnerByOwnerIdOrThrow(loginRequestDto);
+		ownerUtilsService.validatePasswordOrThrow(loginRequestDto, owner);
 		return tokenService.issueToken(owner.getId());
 	}
 
@@ -50,23 +45,6 @@ public class OwnerAuthService {
 	public TokenResponseDto tokens() {
 		var requestContext = RequestContextHolder.getRequestAttributes();
 		var ownerId = requestContext.getAttribute("ownerId", RequestAttributes.SCOPE_REQUEST);
-
 		return tokenService.issueToken((Integer) ownerId);
-	}
-
-	private void validateOwnerDoesNotExist(RegisterRequestDto registerRequestDto) {
-		if (ownerRepository.existsByUserId(registerRequestDto.getUserId()))
-			throw new ApiException(OwnerErrorCode.NO_OWNER);
-
-	}
-
-	private Owner findOwnerByOwnerIdOrThrow(LoginRequestDto loginRequestDto) {
-		return ownerRepository.findByUserId(loginRequestDto.getUserId())
-			.orElseThrow(() -> new ApiException(OwnerErrorCode.NO_OWNER));
-	}
-
-	private void validatePasswordOrThrow(LoginRequestDto loginRequestDto, Owner owner) {
-		if (!passwordEncoder.matches(loginRequestDto.getPassword(), owner.getPassword()))
-			throw new ApiException(OwnerErrorCode.INVALID_PASSWORD);
 	}
 }

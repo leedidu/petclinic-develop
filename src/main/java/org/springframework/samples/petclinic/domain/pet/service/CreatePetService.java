@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.samples.petclinic.common.error.PetErrorCode;
 import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.owner.model.Owner;
-import org.springframework.samples.petclinic.domain.owner.repository.OwnerRepository;
+import org.springframework.samples.petclinic.domain.owner.service.OwnerUtilsService;
 import org.springframework.samples.petclinic.domain.pet.dto.PetRequestDto;
-import org.springframework.samples.petclinic.domain.pet.dto.PetResponseDto;
 import org.springframework.samples.petclinic.domain.pet.mapper.PetMapper;
 import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.pet.model.PetType;
@@ -19,21 +18,16 @@ import org.springframework.stereotype.Service;
 public class CreatePetService {
 
 	private final PetRepository petRepository;
-	private final OwnerRepository ownerRepository;
+	private final OwnerUtilsService ownerUtilsService;
 	private final PetTypeRepository petTypeRepository;
 	private final PetMapper petMapper;
 
 	// Pet 생성
-	public PetResponseDto createPet(PetRequestDto request) {
+	public Pet createPet(PetRequestDto request) {
 		PetType petType = petTypeRepository.findById(request.getTypeId())
 			.orElseThrow(() -> new ApiException(PetErrorCode.INVALID_PET_TYPE));
-
-		Owner owner = ownerRepository.findById(request.getOwnerId())
-			.orElseThrow(() -> new ApiException(PetErrorCode.INVALID_OWNER));
-
+		Owner owner = ownerUtilsService.findOwnerByIdOrThrow(request.getOwnerId());
 		Pet pet = petMapper.toEntity(request, petType, owner);
-		Pet savedPet = petRepository.save(pet);
-
-		return petMapper.toDto(savedPet);
+		return petRepository.save(pet);
 	}
 }

@@ -1,13 +1,9 @@
 package org.springframework.samples.petclinic.domain.history.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentRequestDto;
-import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
 import org.springframework.samples.petclinic.domain.history.dto.HistoryRequestDto;
-import org.springframework.samples.petclinic.domain.history.mapper.HistoryMapper;
 import org.springframework.samples.petclinic.domain.history.model.History;
 import org.springframework.samples.petclinic.domain.history.repository.HistoryRepository;
-import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.vet.service.vet.VetUtilsService;
 import org.springframework.samples.petclinic.domain.visit.model.Visit;
@@ -19,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class UpdateHistoryService {
 
 	private final HistoryRepository historyRepository;
-	private final HistoryMapper historyMapper;
 	private final VetUtilsService vetUtilsService;
 	private final HistoryUtilsService historyUtilsService;
 	private final VisitUtilsService visitUtilsService;
