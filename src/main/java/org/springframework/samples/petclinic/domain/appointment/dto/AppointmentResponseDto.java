@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class AppointmentResponseDto {
+
 	private Integer id;
-
 	private LocalDateTime apptDateTime;
-
 	private ApptStatus status;
 	private String symptoms;
 	private Integer vetId;

@@ -18,6 +18,7 @@ public class ReadAppointmentService {
 
 	private final AppointmentRepository appointmentRepository;
 	private final AppointmentMapper appointmentMapper;
+	private final AppointmentUtilsService appointmentUtilsService;
 
 	public List<AppointmentResponseDto> findAllAppointments() {
 		return appointmentRepository.findAll().stream()
@@ -26,12 +27,7 @@ public class ReadAppointmentService {
 	}
 
 	public AppointmentResponseDto findAppointment(Integer appointmentId) {
-		Appointment appointment = getAppointmentOrThrow(appointmentId);
+		Appointment appointment = appointmentUtilsService.getAppointmentOrThrow(appointmentId);
 		return appointmentMapper.toDto(appointment);
-	}
-
-	private Appointment getAppointmentOrThrow(Integer appointmentId) {
-		return appointmentRepository.findById(appointmentId)
-			.orElseThrow(() -> new ApiException(AppointmentErrorCode.NO_APPOINTMENT));
 	}
 }

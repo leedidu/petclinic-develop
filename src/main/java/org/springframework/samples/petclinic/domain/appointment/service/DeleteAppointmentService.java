@@ -12,14 +12,10 @@ import org.springframework.stereotype.Service;
 public class DeleteAppointmentService {
 
 	private final AppointmentRepository appointmentRepository;
+	private final AppointmentUtilsService appointmentUtilsService;
 
 	public void deleteAppointment(Integer appointmentId) {
-		Appointment appointment = getAppointmentOrThrow(appointmentId);
+		Appointment appointment = appointmentUtilsService.getAppointmentOrThrow(appointmentId);
 		appointmentRepository.delete(appointment);
-	}
-
-	private Appointment getAppointmentOrThrow(Integer appointmentId) {
-		return appointmentRepository.findById(appointmentId)
-			.orElseThrow(() -> new ApiException(AppointmentErrorCode.NO_APPOINTMENT));
 	}
 }

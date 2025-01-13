@@ -27,7 +27,7 @@ public class AppointmentMapper {
 		return Appointment.builder()
 			.pet(pet)
 			.vet(vet)
-			.apptDateTime(LocalDateTime.now())
+			.apptDateTime(request.getApptDateTime())
 			.status(request.getAppStatus())
 			.symptoms(request.getSymptoms())
 			.build();
