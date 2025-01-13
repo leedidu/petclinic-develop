@@ -13,7 +13,7 @@ import org.springframework.samples.petclinic.domain.review.model.Review;
 import org.springframework.samples.petclinic.domain.review.repository.ReviewRepository;
 import org.springframework.samples.petclinic.domain.vet.repository.VetRepository;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
-import org.springframework.samples.petclinic.domain.vet.service.VetService;
+import org.springframework.samples.petclinic.domain.vet.service.vet.VetUtilsService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ public class UpdateReviewService {
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper reviewMapper;
 	private final VetRepository vetRepository;
-	private final VetService vetService;
+	private final VetUtilsService vetUtilsService;
 
 	public ReviewResponseDto updateReview(ReviewRequestDto request, Integer ownerId, Integer reviewId) {
 		validateRequestData(request);
@@ -34,7 +34,7 @@ public class UpdateReviewService {
 		Review review = getReviewOrThrow(reviewId);
 		validateOwner(ownerId, review);
 
-		Vet vet = vetService.getVetOrThrow(review.getVet().getId());
+		Vet vet = vetUtilsService.getVetOrThrow(review.getVet().getId());
 		updateVetRatingsIfNeeded(request, review, vet);
 
 		review.updateReview(request.getScore(), request.getContent());

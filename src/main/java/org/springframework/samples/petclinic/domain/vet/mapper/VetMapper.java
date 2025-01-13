@@ -5,7 +5,7 @@ import org.springframework.samples.petclinic.domain.vet.dto.VetRequestDto;
 import org.springframework.samples.petclinic.domain.vet.dto.VetResponseDto;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.vet.model.enums.VetStatus;
-import org.springframework.samples.petclinic.domain.vet.service.SpecialtyService;
+import org.springframework.samples.petclinic.domain.vet.service.specialty.SpecialtyService;
 import org.springframework.stereotype.Component;
 
 @Component

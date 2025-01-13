@@ -20,7 +20,7 @@ import org.springframework.samples.petclinic.domain.pet.enums.PetStatus;
 import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.pet.repository.PetRepository;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
-import org.springframework.samples.petclinic.domain.vet.service.VetService;
+import org.springframework.samples.petclinic.domain.vet.service.vet.VetService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

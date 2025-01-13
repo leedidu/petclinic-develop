@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.domain.vet.service;
+package org.springframework.samples.petclinic.domain.vet.service.specialty;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.samples.petclinic.common.error.SpecialityErrorCode;
