@@ -25,7 +25,7 @@ public class AppointmentRequestDto {
 	@NotNull
 	private LocalDateTime apptDateTime;
 
-	private ApptStatus appStatus;
+	private ApptStatus status;
 
 	@NotNull
 	private String symptoms;

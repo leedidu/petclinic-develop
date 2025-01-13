@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.domain.history.dto.HistoryRequestDto;
 import org.springframework.samples.petclinic.domain.history.dto.HistoryResponseDto;
+import org.springframework.samples.petclinic.domain.history.mapper.HistoryMapper;
+import org.springframework.samples.petclinic.domain.history.model.History;
 import org.springframework.samples.petclinic.domain.history.service.CreateHistoryService;
 import org.springframework.samples.petclinic.domain.history.service.DeleteHistoryService;
 import org.springframework.samples.petclinic.domain.history.service.ReadHistoryService;
@@ -23,6 +25,7 @@ public class HistoryController {
 	private final ReadHistoryService readHistoryService;
 	private final UpdateHistoryService updateHistoryService;
 	private final DeleteHistoryService deleteHistoryService;
+	private final HistoryMapper historyMapper;
 
 	/**
 	 * 새로운 진료 내역 추가
@@ -31,8 +34,9 @@ public class HistoryController {
 	 * @return 추가된 진료 내역
 	 */
 	@PostMapping
-	public ResponseEntity<?> addHistory(@Valid @RequestBody HistoryRequestDto request) {
-		HistoryResponseDto response = createHistoryService.addHistory(request);
+	public ResponseEntity<HistoryResponseDto> addHistory(@Valid @RequestBody HistoryRequestDto request) {
+		History history = createHistoryService.addHistory(request);
+		HistoryResponseDto response = historyMapper.toDto(history);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
@@ -44,7 +48,8 @@ public class HistoryController {
 	 */
 	@GetMapping("/{petId}")
 	public ResponseEntity<List<HistoryResponseDto>> getHistoriesByPetId(@PathVariable("petId") int petId) {
-		List<HistoryResponseDto> response = readHistoryService.getHistoriesByPetId(petId);
+		List<History> histories = readHistoryService.getHistoriesByPetId(petId);
+		List<HistoryResponseDto> response = historyMapper.toListDto(histories);
 		return ResponseEntity.ok(response);
 	}
 
@@ -55,8 +60,9 @@ public class HistoryController {
 	 * @return 수정된 진료 내역
 	 */
 	@PutMapping("/{historyId}")
-	public ResponseEntity<?> updateHistory(@PathVariable("historyId") int historyId,@Valid @RequestBody HistoryRequestDto request) {
-		HistoryResponseDto response = updateHistoryService.updateHistory(historyId,request);
+	public ResponseEntity<HistoryResponseDto> updateHistory(@PathVariable("historyId") int historyId,@Valid @RequestBody HistoryRequestDto request) {
+		History history = updateHistoryService.updateHistory(historyId,request);;
+		HistoryResponseDto response = historyMapper.toDto(history);
 		return ResponseEntity.ok(response);
 	}
 
@@ -67,7 +73,7 @@ public class HistoryController {
 	 * @return 삭제 결과 메시지
 	 */
 	@DeleteMapping("/{historyId}")
-	public ResponseEntity<?> deleteHistory(@PathVariable("historyId") int historyId) {
+	public ResponseEntity<String> deleteHistory(@PathVariable("historyId") int historyId) {
 		deleteHistoryService.deleteHistory(historyId);
 		return ResponseEntity.ok("History deleted successfully.");
 	}

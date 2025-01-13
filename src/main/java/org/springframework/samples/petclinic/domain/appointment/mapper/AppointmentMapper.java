@@ -7,7 +7,7 @@ import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class AppointmentMapper {
@@ -23,12 +23,18 @@ public class AppointmentMapper {
 			.build();
 	}
 
+	public List<AppointmentResponseDto> toListDto(List<Appointment> appointments) {
+		return appointments.stream()
+			.map(this::toDto)
+			.toList();
+	}
+
 	public Appointment toEntity(AppointmentRequestDto request, Pet pet, Vet vet) {
 		return Appointment.builder()
 			.pet(pet)
 			.vet(vet)
 			.apptDateTime(request.getApptDateTime())
-			.status(request.getAppStatus())
+			.status(request.getStatus())
 			.symptoms(request.getSymptoms())
 			.build();
 	}

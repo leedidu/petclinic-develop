@@ -7,6 +7,8 @@ import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.visit.model.Visit;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class HistoryMapper {
 
@@ -24,6 +26,12 @@ public class HistoryMapper {
 			.vetId(history.getVet().getId())
 			.visitId(history.getVisit().getId())
 			.build();
+	}
+
+	public List<HistoryResponseDto> toListDto(List<History> histories) {
+		return histories.stream()
+			.map(this::toDto)
+			.toList();
 	}
 
 	/**

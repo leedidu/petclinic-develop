@@ -1,9 +1,6 @@
 package org.springframework.samples.petclinic.domain.appointment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.AppointmentErrorCode;
-import org.springframework.samples.petclinic.common.exception.ApiException;
-import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentResponseDto;
 import org.springframework.samples.petclinic.domain.appointment.mapper.AppointmentMapper;
 import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
 import org.springframework.samples.petclinic.domain.appointment.repository.AppointmentRepository;
@@ -20,14 +17,11 @@ public class ReadAppointmentService {
 	private final AppointmentMapper appointmentMapper;
 	private final AppointmentUtilsService appointmentUtilsService;
 
-	public List<AppointmentResponseDto> findAllAppointments() {
-		return appointmentRepository.findAll().stream()
-			.map(appointmentMapper::toDto)
-			.collect(Collectors.toList());
+	public List<Appointment> findAllAppointments() {
+		return appointmentRepository.findAll();
 	}
 
-	public AppointmentResponseDto findAppointment(Integer appointmentId) {
-		Appointment appointment = appointmentUtilsService.getAppointmentOrThrow(appointmentId);
-		return appointmentMapper.toDto(appointment);
+	public Appointment findAppointment(Integer appointmentId) {
+		return appointmentUtilsService.getAppointmentOrThrow(appointmentId);
 	}
 }

@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.domain.history.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.HistoryErrorCode;
-import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.history.repository.HistoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class DeleteHistoryService {
 
 	private final HistoryRepository historyRepository;
+	private final HistoryUtilsService historyUtilsService;
 
 	/**
 	 * 진료 내역 삭제
@@ -18,13 +17,7 @@ public class DeleteHistoryService {
 	 * @param historyId 삭제할 진료 내역 ID
 	 */
 	public void deleteHistory(int historyId) {
-
-		//진료내역 존재 여부 확인
-		if (!historyRepository.existsById(historyId)) {
-			throw new ApiException(HistoryErrorCode.NO_HISTORY);
-		}
-
-		//진료내역 삭제
+		historyUtilsService.getHistoryOrThrow(historyId);
 		historyRepository.deleteById(historyId);
 	}
 }

@@ -38,12 +38,14 @@ public class Appointment extends BaseEntity {
 	@JoinColumn(name = "vet_id", nullable = false)
 	private Vet vet;
 
-	public void updateAppointment(LocalDateTime apptDateTime, ApptStatus status, String symptoms, Pet pet, Vet vet) {
-		this.apptDateTime = apptDateTime != null ? apptDateTime : this.apptDateTime;
-		this.status = status != null ? status : this.status;
-		this.symptoms = symptoms != null ? symptoms : this.symptoms;
-		this.pet = pet != null ? pet : this.pet;
-		this.vet = vet != null ? vet : this.vet;
+	public Appointment updateAppointment(LocalDateTime apptDateTime, ApptStatus status, String symptoms, Pet pet, Vet vet) {
+		return Appointment.builder()
+			.apptDateTime(apptDateTime != null ? apptDateTime : this.apptDateTime)
+			.status(status != null ? status : this.status)
+			.symptoms(symptoms != null ? symptoms : this.symptoms)
+			.pet(pet != null ? pet : this.pet)
+			.vet(vet != null ? vet : this.vet)
+			.build();
 	}
 }
 

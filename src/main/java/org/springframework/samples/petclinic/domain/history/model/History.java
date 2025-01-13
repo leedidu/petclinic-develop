@@ -6,9 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.samples.petclinic.domain.appointment.model.enums.ApptStatus;
+import org.springframework.samples.petclinic.domain.pet.model.Pet;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.visit.model.Visit;
 import org.springframework.samples.petclinic.model.BaseEntity;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -29,4 +33,13 @@ public class History extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "visit_id")
 	private Visit visit;
+
+	public History updateHistory(String symptoms, String content, Vet vet, Visit visit) {
+		return History.builder()
+			.symptoms(symptoms != null ? symptoms : this.symptoms)
+			.content(content != null ? content : this.content)
+			.vet(vet != null ? vet : this.vet)
+			.visit(visit != null ? visit : this.visit)
+			.build();
+	}
 }

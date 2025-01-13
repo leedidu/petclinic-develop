@@ -1,10 +1,7 @@
 package org.springframework.samples.petclinic.domain.appointment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.AppointmentErrorCode;
-import org.springframework.samples.petclinic.common.error.PetErrorCode;
 import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentRequestDto;
-import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentResponseDto;
 import org.springframework.samples.petclinic.domain.appointment.mapper.AppointmentMapper;
 import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
 import org.springframework.samples.petclinic.domain.appointment.repository.AppointmentRepository;
@@ -25,26 +22,14 @@ public class UpdateAppointmentService {
 	private final AppointmentMapper appointmentMapper;
 	private final AppointmentUtilsService appointmentUtilsService;
 
-	public AppointmentResponseDto updateAppointment(Integer appointmentId, AppointmentRequestDto request) {
+	public Appointment updateAppointment(Integer appointmentId, AppointmentRequestDto request) {
 		Appointment appointment = appointmentUtilsService.getAppointmentOrThrow(appointmentId);
 		Pet pet = petUtilsService.getPetOrThrow(request.getPetId());
 		Vet vet = vetUtilsService.getVetOrThrow(request.getVetId());
 		appointmentUtilService.validateRequestData(request, pet, vet);
 
-		updateAppointmentDetails(request, appointment, pet, vet);
+		Appointment updatedAppointment = appointment.updateAppointment(request.getApptDateTime(), request.getStatus(), request.getSymptoms(), pet, vet);
 
-		Appointment updatedAppointment = appointmentRepository.save(appointment);
-
-		return appointmentMapper.toDto(updatedAppointment);
-	}
-
-	private static void updateAppointmentDetails(AppointmentRequestDto request, Appointment appointment, Pet pet, Vet vet) {
-		appointment.updateAppointment(
-			request.getApptDateTime(),
-			request.getAppStatus(),
-			request.getSymptoms(),
-			pet,
-			vet
-		);
+		return appointmentRepository.save(updatedAppointment);
 	}
 }

@@ -1,23 +1,15 @@
 package org.springframework.samples.petclinic.domain.appointment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.AppointmentErrorCode;
-import org.springframework.samples.petclinic.common.error.PetErrorCode;
-import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentRequestDto;
 import org.springframework.samples.petclinic.domain.appointment.mapper.AppointmentMapper;
 import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
-import org.springframework.samples.petclinic.domain.appointment.model.enums.ApptStatus;
 import org.springframework.samples.petclinic.domain.appointment.repository.AppointmentRepository;
-import org.springframework.samples.petclinic.domain.pet.enums.PetStatus;
 import org.springframework.samples.petclinic.domain.pet.model.Pet;
-import org.springframework.samples.petclinic.domain.pet.repository.PetRepository;
 import org.springframework.samples.petclinic.domain.pet.service.PetUtilsService;
 import org.springframework.samples.petclinic.domain.vet.model.Vet;
 import org.springframework.samples.petclinic.domain.vet.service.vet.VetUtilsService;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

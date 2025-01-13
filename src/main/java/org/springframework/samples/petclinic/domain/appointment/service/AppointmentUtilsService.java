@@ -27,7 +27,7 @@ public class AppointmentUtilsService {
 	// 요청값 검증
 	public void validateRequestData(AppointmentRequestDto request, Pet pet, Vet vet) {
 		validateAppointmentDate(request.getApptDateTime());
-		validateAppointmentStatus(request.getAppStatus());
+		validateAppointmentStatus(request.getStatus());
 		validateSymptoms(request.getSymptoms());
 		if (appointmentRepository.existsByPetAndVetAndApptDateTime(pet, vet, request.getApptDateTime())) {
 			throw new ApiException(AppointmentErrorCode.CONFLICTING_APPOINTMENT);

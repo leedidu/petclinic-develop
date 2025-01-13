@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.domain.appointment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.common.error.AppointmentErrorCode;
-import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
 import org.springframework.samples.petclinic.domain.appointment.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;

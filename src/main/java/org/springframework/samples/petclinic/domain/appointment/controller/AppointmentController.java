@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentRequestDto;
 import org.springframework.samples.petclinic.domain.appointment.dto.AppointmentResponseDto;
+import org.springframework.samples.petclinic.domain.appointment.mapper.AppointmentMapper;
 import org.springframework.samples.petclinic.domain.appointment.model.Appointment;
 import org.springframework.samples.petclinic.domain.appointment.service.CreateAppointmentService;
 import org.springframework.samples.petclinic.domain.appointment.service.DeleteAppointmentService;
@@ -23,25 +24,29 @@ public class AppointmentController {
 	private final ReadAppointmentService readAppointmentService;
 	private final UpdateAppointmentService updateAppointmentService;
 	private final DeleteAppointmentService deleteAppointmentService;
+	private final AppointmentMapper appointmentMapper;
 
 	// 예약 생성
 	@PostMapping
 	public ResponseEntity<AppointmentResponseDto> createAppointment(@Valid @RequestBody AppointmentRequestDto request) {
 		Appointment appointment = createAppointmentService.createAppointment(request);
-		AppointmentResponseDto response = new AppointmentResponseDto(appointment);
+		AppointmentResponseDto response = appointmentMapper.toDto(appointment);
 		return ResponseEntity.ok(response);
 	}
 
 	// 전체 예약 조회
 	@GetMapping
 	public ResponseEntity<List<AppointmentResponseDto>> getAllAppointments() {
-		return ResponseEntity.ok(readAppointmentService.findAllAppointments());
+		List<Appointment> appointments = readAppointmentService.findAllAppointments();
+		List<AppointmentResponseDto> response = appointmentMapper.toListDto(appointments);
+		return ResponseEntity.ok(response);
 	}
 
 	// 특정 예약 조회
 	@GetMapping("/{appointmentId}")
 	public ResponseEntity<AppointmentResponseDto> getAppointment(@PathVariable("appointmentId") Integer appointmentId) {
-		AppointmentResponseDto response = readAppointmentService.findAppointment(appointmentId);
+		Appointment appointment = readAppointmentService.findAppointment(appointmentId);
+		AppointmentResponseDto response = appointmentMapper.toDto(appointment);
 		return ResponseEntity.ok(response);
 	}
 
@@ -49,7 +54,8 @@ public class AppointmentController {
 	@PutMapping("/{appointmentId}")
 	public ResponseEntity<AppointmentResponseDto> updateAppointment(@PathVariable("appointmentId") Integer appointmentId,
 																	@RequestBody AppointmentRequestDto request) {
-		AppointmentResponseDto response = updateAppointmentService.updateAppointment(appointmentId, request);
+		Appointment appointment = updateAppointmentService.updateAppointment(appointmentId, request);
+		AppointmentResponseDto response = appointmentMapper.toDto(appointment);
 		return ResponseEntity.ok(response);
 	}
 

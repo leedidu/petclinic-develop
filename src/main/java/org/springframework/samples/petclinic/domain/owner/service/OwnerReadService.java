@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.samples.petclinic.common.error.OwnerErrorCode;
 import org.springframework.samples.petclinic.common.exception.ApiException;
 import org.springframework.samples.petclinic.domain.owner.dto.OwnerResponseDto;
-import org.springframework.samples.petclinic.domain.owner.exception.OwnerNotFoundException;
 import org.springframework.samples.petclinic.domain.owner.model.Owner;
 import org.springframework.samples.petclinic.domain.owner.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
